@@ -1,0 +1,11 @@
+FROM python:2
+MAINTAINER Cristian Romo "cristian.g.romo@gmail.com"
+
+RUN apt-get update && \
+  apt-get install \
+    omniorb-nameserver \
+    -y && \
+  rm -rf /var/lib/apt/lists/*
+RUN cp -r /usr/lib/python2.7/dist-packages/* /usr/local/lib/python2.7/site-packages
+
+CMD ["omniNames", "-start"]

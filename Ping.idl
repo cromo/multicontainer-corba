@@ -1,0 +1,7 @@
+module Example
+{
+  interface Pingable
+  {
+    void ping();
+  };
+};
