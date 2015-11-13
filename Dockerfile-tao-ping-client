@@ -1,0 +1,18 @@
+FROM ubuntu:precise
+MAINTAINER Cristian Romo "cristian.g.romo@gmail.com"
+
+RUN apt-get update && \
+  apt-get install \
+    g++ \
+    libtao-dev \
+    libtao-orbsvcs-dev \
+    tao-idl \
+    -y && \
+  rm -rf /var/lib/apt/lists/*
+WORKDIR /source
+ADD Ping.idl Ping.idl
+ADD tao-ping-client.cpp tao-ping-client.cpp
+RUN tao_idl Ping.idl && \
+  g++ PingC.cpp tao-ping-client.cpp -lTAO_Valuetype -lTAO_PortableServer -lTAO_IORTable -lTAO_AnyTypeCode -lTAO_CosEvent -lTAO_CosNaming -lTAO -lACE -o tao-ping-client
+
+CMD ["bash"]
