@@ -1,5 +1,8 @@
 images: omninames omni-ping-server omni-ping-client
 
+jacorb-ping-client:
+	docker build -f Dockerfile-jacorb-ping-client -t jacorb-ping-client .
+
 omninames:
 	docker build -f Dockerfile-omninames -t omninames .
 
@@ -14,6 +17,9 @@ tao-ping-server:
 
 tao-ping-client:
 	docker build -f Dockerfile-tao-ping-client -t tao-ping-client .
+
+run-jacorb-ping-client: jacorb-ping-client
+	docker run -it --rm --net=corba jacorb-ping-client
 
 run-omninames: omninames
 	docker run -itd --net=corba --name nameservice omninames

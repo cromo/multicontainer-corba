@@ -1,0 +1,20 @@
+FROM java:8
+MAINTAINER Cristian Romo "cristian.g.romo@gmail.com"
+
+ENV JACORB_VERSION 3.7
+ENV JACORB_HOME /opt/jacorb-$JACORB_VERSION
+ENV PATH $JACORB_HOME/bin:$PATH
+
+RUN cd /opt && \
+  curl -O http://www.jacorb.org/releases/$JACORB_VERSION/jacorb-$JACORB_VERSION-binary.zip && \
+  unzip jacorb-$JACORB_VERSION-binary.zip && \
+  rm jacorb-$JACORB_VERSION-binary.zip
+
+WORKDIR /source
+ADD Ping.idl Ping.idl
+ADD JacorbPingClient.java JacorbPingClient.java
+
+RUN idl Ping.idl && \
+  javac -cp $JACORB_HOME/lib/jacorb-$JACORB_VERSION.jar:$JACORB_HOME/lib/jacorb-omgapi-$JACORB_VERSION.jar:. JacorbPingClient.java Example/*.java
+
+CMD ["java", "JacorbPingClient", "-ORBInitRef", "NameService=corbaloc::nameservice:2809/NameService"]
