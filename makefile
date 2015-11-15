@@ -9,6 +9,12 @@ omni-ping-server:
 omni-ping-client:
 	docker build -f Dockerfile-omni-ping-client -t omni-ping-client .
 
+tao-ping-server:
+	docker build -f Dockerfile-tao-ping-server -t tao-ping-server .
+
+tao-ping-client:
+	docker build -f Dockerfile-tao-ping-client -t tao-ping-client .
+
 run-omninames: omninames
 	docker run -itd --net=corba --name nameservice omninames
 
@@ -17,3 +23,9 @@ run-omni-ping-server: omni-ping-server
 
 run-omni-ping-client: omni-ping-client
 	docker run -it --rm --net=corba omni-ping-client
+
+run-tao-ping-server: tao-ping-server
+	docker run -it --rm --net=corba tao-ping-server
+
+run-tao-ping-client: tao-ping-client
+	docker run -it --rm --net=corba tao-ping-client

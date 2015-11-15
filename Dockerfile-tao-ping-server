@@ -11,8 +11,8 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 WORKDIR /source
 ADD Ping.idl Ping.idl
-ADD tao-ping-client.cpp tao-ping-client.cpp
+ADD tao-ping-server.cpp tao-ping-server.cpp
 RUN tao_idl Ping.idl && \
-  g++ PingC.cpp tao-ping-client.cpp -lTAO_Valuetype -lTAO_PortableServer -lTAO_IORTable -lTAO_AnyTypeCode -lTAO_CosEvent -lTAO_CosNaming -lTAO -lACE -o tao-ping-client
+  g++ PingC.cpp PingS.cpp tao-ping-server.cpp -lTAO_Valuetype -lTAO_PortableServer -lTAO_IORTable -lTAO_AnyTypeCode -lTAO_CosEvent -lTAO_CosNaming -lTAO -lACE -o tao-ping-server
 
-CMD ["./tao-ping-client", "-ORBDottedDecimalAddresses", "1"]
+CMD ["./tao-ping-server", "-ORBDottedDecimalAddresses", "1"]
