@@ -1,5 +1,8 @@
 images: omninames omni-ping-server omni-ping-client
 
+iiopnet-ping-client:
+	docker build -f Dockerfile-iiopnet-ping-client -t iiopnet-ping-client .
+
 jacorb-ping-server:
 	docker build -f Dockerfile-jacorb-ping-server -t jacorb-ping-server .
 
@@ -20,6 +23,9 @@ tao-ping-server:
 
 tao-ping-client:
 	docker build -f Dockerfile-tao-ping-client -t tao-ping-client .
+
+run-iiopnet-ping-client: iiopnet-ping-client
+	docker run -it --rm --net=corba iiopnet-ping-client
 
 run-jacorb-ping-server: jacorb-ping-server
 	docker run -it --rm --net=corba jacorb-ping-server

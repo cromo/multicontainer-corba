@@ -1,0 +1,32 @@
+FROM mono:4
+MAINTAINER Cristian Romo "cristian.g.romo@gmail.com"
+# install unzip to extract sources, build-essential to get make
+# change CSC=gmcs in MakeVars.mono to CSC=mcs
+# run make -f Makefile.mono to build
+
+ENV IIOPNET_VERSION 1.9.3
+
+RUN apt-get update && \
+  apt-get install \
+    build-essential \
+    unzip \
+    -y && \
+  rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /opt/iiop.net && \
+  cd /opt/iiop.net && \
+  curl -O http://skylineservers.dl.sourceforge.net/project/iiop-net/IIOP.NET/$IIOPNET_VERSION/IIOPNet.src.$IIOPNET_VERSION.zip && \
+  unzip IIOPNet.src.$IIOPNET_VERSION.zip && \
+  rm IIOPNet.src.$IIOPNET_VERSION.zip && \
+  sed -i 's/gmcs/mcs/' MakeVars.mono && \
+  make -f Makefile.mono
+RUN >/usr/local/bin/IDLToCLSCompiler echo 'mono /opt/iiop.net/IDLToCLSCompiler/IDLCompiler/bin/IDLToCLSCompiler.exe "$@"' && \
+  chmod +x /usr/local/bin/IDLToCLSCompiler
+
+WORKDIR /source
+ADD Ping.idl Ping.idl
+ADD IiopNetPingClient.cs IiopNetPingClient.cs
+
+RUN IDLToCLSCompiler Ping Ping.idl && \
+  cp /opt/iiop.net/IIOPChannel/bin/IIOPChannel.dll . && \
+  mcs IiopNetPingClient.cs /r:Ping.dll /r:IIOPChannel.dll
+CMD ["mono", "IiopNetPingClient.exe", "corbaloc::nameservice:2809/NameService"]
