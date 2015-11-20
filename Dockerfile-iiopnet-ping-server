@@ -21,9 +21,9 @@ RUN >/usr/local/bin/IDLToCLSCompiler echo 'mono /opt/iiop.net/IDLToCLSCompiler/I
 
 WORKDIR /source
 ADD Ping.idl Ping.idl
-ADD IiopNetPingClient.cs IiopNetPingClient.cs
+ADD IiopNetPingServer.cs IiopNetPingServer.cs
 
 RUN IDLToCLSCompiler Ping Ping.idl && \
   cp /opt/iiop.net/IIOPChannel/bin/IIOPChannel.dll . && \
-  mcs IiopNetPingClient.cs /r:Ping.dll /r:IIOPChannel.dll
-CMD ["mono", "IiopNetPingClient.exe", "corbaloc::nameservice:2809/NameService"]
+  mcs IiopNetPingServer.cs /r:Ping.dll /r:IIOPChannel.dll
+CMD ["mono", "IiopNetPingServer.exe", "corbaloc::nameservice:2809/NameService"]
