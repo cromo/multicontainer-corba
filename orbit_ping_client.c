@@ -20,7 +20,7 @@ static void abort_if_exception(CORBA_Environment *ev, char const* message) {
     }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
 
     g_print("Client>starting client...\n");
     g_print("Client>creating and initializing the ORB\n");
