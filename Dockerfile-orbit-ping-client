@@ -1,0 +1,17 @@
+FROM gcc:4
+MAINTAINER Cristian Romo "cristian.g.romo@gmail.com"
+
+RUN apt-get update && \
+  apt-get install \
+    libglib2.0-dev \
+    liborbit2-dev \
+    -y && \
+  rm -rf /var/lib/apt/lists/*
+
+WORKDIR /source
+ADD Ping.idl Ping.idl
+ADD orbit_ping_client.c orbit_ping_client.c
+RUN orbit-idl-2 Ping.idl && \
+  gcc -o orbit_ping_client -g -pthread -D_REENTRANT -I/usr/include/orbit-2.0 -DORBIT2=1 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -lORBit-2 -lORBitCosNaming-2 -lpthread Ping-common.c Ping-stubs.c orbit_ping_client.c
+
+CMD ["./orbit_ping_client", "corbaloc::nameservice:2809/NameService"]

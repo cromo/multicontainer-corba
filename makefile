@@ -21,6 +21,9 @@ omni-ping-server:
 omni-ping-client:
 	docker build -f Dockerfile-omni-ping-client -t omni-ping-client .
 
+orbit-ping-client:
+	docker build -f Dockerfile-orbit-ping-client -t orbit-ping-client .
+
 tao-ping-server:
 	docker build -f Dockerfile-tao-ping-server -t tao-ping-server .
 
@@ -47,6 +50,9 @@ run-omni-ping-server: omni-ping-server
 
 run-omni-ping-client: omni-ping-client
 	docker run -it --rm --net=corba omni-ping-client
+
+run-orbit-ping-client: orbit-ping-client
+	docker run -it --rm --net=corba orbit-ping-client
 
 run-tao-ping-server: tao-ping-server
 	docker run -it --rm --net=corba tao-ping-server
