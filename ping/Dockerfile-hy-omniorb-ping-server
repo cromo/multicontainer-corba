@@ -1,0 +1,18 @@
+FROM python:2
+MAINTAINER Cristian Romo "cristian.g.romo@gmail.com"
+
+RUN apt-get update && \
+  apt-get install \
+    omniidl \
+    omniidl-python \
+    python-omniorb \
+    -y && \
+  rm -rf /var/lib/apt/lists/*
+RUN pip install hy
+RUN cp -r /usr/lib/python2.7/dist-packages/* /usr/local/lib/python2.7/site-packages
+
+WORKDIR /source
+ADD Ping.idl Ping.idl
+ADD omniorb-ping-server.hy omniorb-ping-server.hy
+
+CMD ["hy", "omniorb-ping-server.hy", "corbaloc::nameservice:2809/NameService"]

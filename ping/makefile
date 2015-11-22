@@ -18,6 +18,12 @@ cs-iiopnet-ping-server:
 cs-iiopnet-ping-client:
 	docker build -f Dockerfile-cs-iiopnet-ping-client -t cs-iiopnet-ping-client .
 
+hy-omniorb-ping-server:
+	docker build -f Dockerfile-hy-omniorb-ping-server -t hy-omniorb-ping-server .
+
+hy-omniorb-ping-client:
+	docker build -f Dockerfile-hy-omniorb-ping-client -t hy-omniorb-ping-client .
+
 java-jacorb-ping-server:
 	docker build -f Dockerfile-java-jacorb-ping-server -t java-jacorb-ping-server .
 
@@ -44,11 +50,18 @@ run-cpp-tao-ping-server: cpp-tao-ping-server
 
 run-cpp-tao-ping-client: cpp-tao-ping-client
 	docker run -it --rm --net=corba cpp-tao-ping-client
+
 run-cs-iiopnet-ping-server: cs-iiopnet-ping-server
 	docker run -it --rm --net=corba cs-iiopnet-ping-server
 
 run-cs-iiopnet-ping-client: cs-iiopnet-ping-client
 	docker run -it --rm --net=corba cs-iiopnet-ping-client
+
+run-hy-omniorb-ping-server: hy-omniorb-ping-server
+	docker run -it --rm --net=corba hy-omniorb-ping-server
+
+run-hy-omniorb-ping-client: hy-omniorb-ping-client
+	docker run -it --rm --net=corba hy-omniorb-ping-client
 
 run-java-jacorb-ping-server: java-jacorb-ping-server
 	docker run -it --rm --net=corba java-jacorb-ping-server
