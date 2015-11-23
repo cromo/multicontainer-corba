@@ -1,4 +1,4 @@
-images: omninames c-orbit2-ping-server c-orbit2-ping-client cpp-tao-ping-server cpp-tao-ping-client cs-iiopnet-ping-server cs-iiopnet-ping-client java-jacorb-ping-server java-jacorb-ping-client python-omniorb-ping-server python-omniorb-ping-client
+images: omninames c-orbit2-ping-server c-orbit2-ping-client cpp-tao-ping-server cpp-tao-ping-client cs-iiopnet-ping-server cs-iiopnet-ping-client java-jacorb-ping-server java-jacorb-ping-client nim-tao-ping-client python-omniorb-ping-server python-omniorb-ping-client
 
 c-orbit2-ping-server:
 	docker build -f Dockerfile-c-orbit2-ping-server -t c-orbit2-ping-server .
@@ -29,6 +29,9 @@ java-jacorb-ping-server:
 
 java-jacorb-ping-client:
 	docker build -f Dockerfile-java-jacorb-ping-client -t java-jacorb-ping-client .
+
+nim-tao-ping-client:
+	docker build -f Dockerfile-nim-tao-ping-client -t nim-tao-ping-client .
 
 omninames:
 	docker build -f Dockerfile-omninames -t omninames .
@@ -68,6 +71,9 @@ run-java-jacorb-ping-server: java-jacorb-ping-server
 
 run-java-jacorb-ping-client: java-jacorb-ping-client
 	docker run -it --rm --net=corba java-jacorb-ping-client
+
+run-nim-tao-ping-client: nim-tao-ping-client
+	docker run -it --rm --net=corba nim-tao-ping-client
 
 run-omninames: omninames
 	docker run -itd --net=corba --name nameservice omninames

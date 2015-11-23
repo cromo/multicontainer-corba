@@ -1,0 +1,40 @@
+FROM ubuntu:precise
+MAINTAINER Cristian Romo "cristian.g.romo@gmail.com"
+
+ENV NIM_HOME /opt/Nim
+ENV PATH $NIM_HOME/bin:$PATH
+
+RUN apt-get update && \
+  apt-get install \
+    g++ \
+    git \
+    libtao-dev \
+    libtao-orbsvcs-dev \
+    tao-idl \
+    -y && \
+  rm -rf /var/lib/apt/lists/*
+RUN git clone git://github.com/nim-lang/Nim.git $NIM_HOME && \
+  cd $NIM_HOME && \
+  git clone --depth 1 git://github.com/nim-lang/csources && \
+  cd csources && sh build.sh && \
+  cd .. && \
+  ./bin/nim c koch && \
+  ./koch boot -d:release && \
+  nim e install_nimble.nims
+WORKDIR /source
+ADD Ping.idl Ping.idl
+ADD tao_ping_client.nim tao_ping_client.nim
+RUN tao_idl Ping.idl && \
+  nim cpp \
+    --passL:-lTAO_Valuetype \
+    --passL:-lTAO_PortableServer \
+    --passL:-lTAO_IORTable \
+    --passL:-lTAO_AnyTypeCode \
+    --passL:-lTAO_CosEvent \
+    --passL:-lTAO_CosNaming \
+    --passL:-lTAO \
+    --passL:-lACE \
+    tao_ping_client.nim
+
+CMD ["./tao_ping_client", "-ORBDottedDecimalAddresses", "1"]
+# CMD ["bash"]
