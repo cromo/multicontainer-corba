@@ -30,6 +30,9 @@ java-jacorb-ping-server:
 java-jacorb-ping-client:
 	docker build -f Dockerfile-java-jacorb-ping-client -t java-jacorb-ping-client .
 
+nim-orbit2-ping-client:
+	docker build -f Dockerfile-nim-orbit2-ping-client -t nim-orbit2-ping-client .
+
 nim-tao-ping-client:
 	docker build -f Dockerfile-nim-tao-ping-client -t nim-tao-ping-client .
 
@@ -71,6 +74,9 @@ run-java-jacorb-ping-server: java-jacorb-ping-server
 
 run-java-jacorb-ping-client: java-jacorb-ping-client
 	docker run -it --rm --net=corba java-jacorb-ping-client
+
+run-nim-orbit2-ping-client: nim-orbit2-ping-client
+	docker run -it --rm --net=corba nim-orbit2-ping-client
 
 run-nim-tao-ping-client: nim-tao-ping-client
 	docker run -it --rm --net=corba nim-tao-ping-client

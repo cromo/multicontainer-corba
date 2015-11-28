@@ -1,0 +1,40 @@
+FROM ubuntu:precise
+MAINTAINER Cristian Romo "cristian.g.romo@gmail.com"
+
+ENV NIM_HOME /opt/Nim
+ENV PATH $NIM_HOME/bin:$PATH
+
+RUN apt-get update && \
+  apt-get install \
+    gcc \
+    git \
+    libglib2.0-dev \
+    liborbit2-dev \
+    -y && \
+  rm -rf /var/lib/apt/lists/*
+RUN git clone git://github.com/nim-lang/Nim.git $NIM_HOME && \
+  cd $NIM_HOME && \
+  git clone --depth 1 git://github.com/nim-lang/csources && \
+  cd csources && sh build.sh && \
+  cd .. && \
+  ./bin/nim c koch && \
+  ./koch boot -d:release && \
+  nim e install_nimble.nims
+WORKDIR /source
+ADD Ping.idl Ping.idl
+ADD orbit2_ping_client.nim orbit2_ping_client.nim
+RUN orbit-idl-2 Ping.idl && \
+  nim c \
+    --passC:-pthread \
+    --passC:-D_REENTRANT \
+    --passC:-D_ORBIT2=1 \
+    --passC:-I/usr/include/orbit-2.0 \
+    --passC:-I/usr/include/glib-2.0 \
+    --passC:-I/usr/lib/x86_64-linux-gnu/glib-2.0/include \
+    --passL:-lORBit-2 \
+    --passL:-lORBitCosNaming-2 \
+    --passL:-lpthread \
+    orbit2_ping_client.nim
+
+CMD ["./orbit2_ping_client", "-ORBDottedDecimalAddresses", "1"]
+# CMD ["bash"]
