@@ -1,0 +1,28 @@
+FROM java:8
+MAINTAINER Cristian Romo "cristian.g.romo@gmail.com"
+
+ENV JACORB_VERSION 3.7
+ENV JACORB_HOME /opt/jacorb-$JACORB_VERSION
+ENV PATH $JACORB_HOME/bin:$PATH
+
+RUN cd /opt && \
+  curl -O http://www.jacorb.org/releases/$JACORB_VERSION/jacorb-$JACORB_VERSION-binary.zip && \
+  unzip jacorb-$JACORB_VERSION-binary.zip && \
+  rm jacorb-$JACORB_VERSION-binary.zip
+
+ENV JYTHON_VERSION 2.7.0
+RUN curl -Lo jython-installer-${JYTHON_VERSION}.jar \
+  "http://search.maven.org/remotecontent?filepath=org/python/jython-installer/${JYTHON_VERSION}/jython-installer-${JYTHON_VERSION}.jar" && \
+  java -jar jython-installer-${JYTHON_VERSION}.jar -s -t minimum -i mod -i ensurepip -d /usr/local/jython-${JYTHON_VERSION} && \
+  rm -f jython-installer-${JYTHON_VERSION}.jar && \
+  ln -s /usr/local/jython-${JYTHON_VERSION}/bin/* /usr/local/bin/
+
+WORKDIR /source
+ADD Ping.idl Ping.idl
+ADD jacorb_ping_client.py jacorb_ping_client.py
+
+RUN idl Ping.idl && \
+  javac -cp $JACORB_HOME/lib/jacorb-$JACORB_VERSION.jar:$JACORB_HOME/lib/jacorb-omgapi-$JACORB_VERSION.jar:. Example/*.java
+
+CMD ["jython", "-J-cp", "$JACORB_HOME/lib/jacorb-$JACORB_VERSION.jar:$JACORB_HOME/lib/jacorb-omgapi-$JACORB_VERSION.jar:.", "jacorb_ping_client.py", "corbaloc::nameservice:2809/NameService"]
+CMD ["bash"]
