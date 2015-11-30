@@ -19,9 +19,9 @@ RUN curl -Lo jython-installer-${JYTHON_VERSION}.jar \
 
 WORKDIR /source
 ADD Ping.idl Ping.idl
-ADD jacorb_ping_client.py jacorb_ping_client.py
+ADD jacorb_ping_server.py jacorb_ping_server.py
 
 RUN idl Ping.idl && \
   javac -cp $JACORB_HOME/lib/jacorb-$JACORB_VERSION.jar:$JACORB_HOME/lib/jacorb-omgapi-$JACORB_VERSION.jar:. Example/*.java
 
-CMD ["jython", "-J-cp", "$JACORB_HOME/lib/jacorb-$JACORB_VERSION.jar:$JACORB_HOME/lib/jacorb-omgapi-$JACORB_VERSION.jar:.", "jacorb_ping_client.py", "corbaloc::nameservice:2809/NameService"]
+CMD ["jython", "-J-cp", "$JACORB_HOME/lib/jacorb-$JACORB_VERSION.jar:$JACORB_HOME/lib/jacorb-omgapi-$JACORB_VERSION.jar:.", "jacorb_ping_server.py", "corbaloc::nameservice:2809/NameService"]

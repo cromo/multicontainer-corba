@@ -30,6 +30,9 @@ java-jacorb-ping-server:
 java-jacorb-ping-client:
 	docker build -f Dockerfile-java-jacorb-ping-client -t java-jacorb-ping-client .
 
+jython-jacorb-ping-server:
+	docker build -f Dockerfile-jython-jacorb-ping-server -t jython-jacorb-ping-server .
+
 jython-jacorb-ping-client:
 	docker build -f Dockerfile-jython-jacorb-ping-client -t jython-jacorb-ping-client .
 
@@ -77,6 +80,9 @@ run-java-jacorb-ping-server: java-jacorb-ping-server
 
 run-java-jacorb-ping-client: java-jacorb-ping-client
 	docker run -it --rm --net=corba java-jacorb-ping-client
+
+run-jython-jacorb-ping-server: jython-jacorb-ping-server
+	docker run -it --rm --net=corba jython-jacorb-ping-server
 
 run-jython-jacorb-ping-client: jython-jacorb-ping-client
 	docker run -it --rm --net=corba jython-jacorb-ping-client
